@@ -12,7 +12,7 @@ export function Login({ onLogin }: LoginProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Hardcoded PIN for simplicity
-    if (pin === '123456') {
+    if (pin === '38382019') {
       onLogin();
     } else {
       setError(true);
