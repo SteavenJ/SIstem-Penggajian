@@ -5,7 +5,8 @@ import {
   Calculator,
   Users,
   Calendar as CalIcon,
-  UserCircle
+  UserCircle,
+  LogOut
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { ViewState } from '../types';
@@ -13,9 +14,10 @@ import { ViewState } from '../types';
 interface SidebarProps {
   currentView: ViewState;
   onViewChange: (view: ViewState) => void;
+  onLogout?: () => void;
 }
 
-export function Sidebar({ currentView, onViewChange }: SidebarProps) {
+export function Sidebar({ currentView, onViewChange, onLogout }: SidebarProps) {
   const navItems = [
     { id: 'dashboard', label: 'Executive View', icon: LayoutDashboard },
     { id: 'import', label: 'Import Timesheets', icon: FileSpreadsheet },
@@ -52,6 +54,17 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
         ))}
       </nav>
 
+      {onLogout && (
+        <div className="p-4 border-t border-apex-border mt-auto">
+          <button
+            onClick={onLogout}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg text-rose-500/80 hover:text-rose-500 hover:bg-rose-500/10 transition-colors text-sm font-bold tracking-widest uppercase"
+          >
+            <LogOut size={16} />
+            Sign Out
+          </button>
+        </div>
+      )}
     </div>
   );
 }

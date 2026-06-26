@@ -5,6 +5,7 @@ import { Dashboard } from './components/Dashboard';
 import { ImportData } from './components/ImportData';
 import { Payroll } from './components/Payroll';
 import { AttendanceList } from './components/AttendanceList';
+import { Login } from './components/Login';
 import { CalendarSettings } from './components/CalendarSettings';
 import { Sun, Moon } from 'lucide-react';
 import { getDefaultRate } from './lib/employee-config';
@@ -12,6 +13,9 @@ import { getDefaultRate } from './lib/employee-config';
 import { EmployeeProfile } from './components/EmployeeProfile';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('apex_auth') === 'true';
+  });
   const [currentView, setCurrentView] = useState<ViewState>('dashboard');
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
   const [rates, setRates] = useState<Record<string, number>>(() => {
@@ -113,11 +117,24 @@ export default function App() {
     setLemburRates(prev => ({ ...prev, [employeeName]: rate }));
   };
 
+  const handleLogin = () => {
+    localStorage.setItem('apex_auth', 'true');
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('apex_auth');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
-    <div className="flex h-screen w-full bg-apex-bg overflow-hidden font-sans text-apex-text transition-colors duration-200">
-      <Sidebar currentView={currentView} onViewChange={setCurrentView} />
-      
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+    <div className="flex h-screen bg-apex-bg overflow-hidden font-sans">
+      <Sidebar currentView={currentView} onViewChange={setCurrentView} onLogout={handleLogout} />
+      <main className="flex-1 flex flex-col h-full overflow-hidden bg-apex-bg relative">
         <header className="h-20 border-b border-apex-border flex flex-wrap items-center justify-between px-10 flex-shrink-0 transition-colors duration-200 bg-apex-bg gap-4">
           <div>
             <h2 className="text-xl font-serif italic capitalize">
