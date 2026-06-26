@@ -1,0 +1,6 @@
+{
+  "name": "Financial Recapitulation App",
+  "description": "A desktop-like application for financial data import, dashboards, and automated tax reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

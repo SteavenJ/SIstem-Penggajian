@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --color-apex-bg: var(--theme-bg);
+  --color-apex-surface: var(--theme-surface);
+  --color-apex-surface-hover: var(--theme-surface-hover);
+  --color-apex-border: var(--theme-border);
+  --color-apex-text: var(--theme-text);
+  --color-apex-muted: var(--theme-muted);
+  --color-apex-accent: var(--theme-accent);
+}
+
+:root {
+  --theme-bg: #0A0A0B;
+  --theme-surface: #141417;
+  --theme-surface-hover: #1C1C21;
+  --theme-border: #2A2A2E;
+  --theme-text: #E5E5E7;
+  --theme-muted: #A1A1AA;
+  --theme-accent: #C5A059;
+}
+
+:root.light {
+  --theme-bg: #FAFAFA;
+  --theme-surface: #FFFFFF;
+  --theme-surface-hover: #F4F4F5;
+  --theme-border: #E4E4E7;
+  --theme-text: #18181B;
+  --theme-muted: #71717A;
+  --theme-accent: #B4860D;
+}
