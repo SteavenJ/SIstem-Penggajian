@@ -46,7 +46,7 @@ export function Payroll({ records, rates, holidays, onUpdateRate, terlambatRate 
       }
 
       // Calculate Lembur
-      const hoursResult = calculateHours(r.totalHours, r.date, holidays);
+      const hoursResult = calculateHours(r.totalHours, r.date, holidays, false, r.checkIn, r.checkOut);
       s.regularHours += hoursResult.regularHours;
       s.overtimeHours += hoursResult.overtimeHours;
 

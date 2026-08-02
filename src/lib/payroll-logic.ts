@@ -58,6 +58,12 @@ export function calculateTerlambat(
     }
 
     const inDecimal = inH + (inM / 60);
+    
+    // If checking in after 11:00, it's a Half Day. No Terlambat penalty applies.
+    if (inDecimal > 11.0) {
+      return { isTerlambat: false, terlambatDays: 0 };
+    }
+
     if (inDecimal > 8.5) {
       return { isTerlambat: true, terlambatDays: 1 };
     }
@@ -76,7 +82,9 @@ export function calculateHours(
   totalHours: number,
   dateStr: string,
   holidays: Holiday[],
-  _isSaturday?: boolean
+  _isSaturday?: boolean,
+  checkIn?: string,
+  checkOut?: string
 ): HoursResult {
   try {
     const { isSunday } = getDateInfo(dateStr);
@@ -93,8 +101,40 @@ export function calculateHours(
     // Fall through to regular calculation
   }
 
-  const regularHours = Math.min(8.0, totalHours);
-  const overtimeHours = Math.max(0, totalHours - 8.0);
+  let maxRegularHours = 8.0;
+
+  if (checkIn) {
+    const [inH, inM] = checkIn.split(':').map(Number);
+    if (!isNaN(inH) && !isNaN(inM)) {
+      const inDecimal = inH + (inM / 60);
+      if (inDecimal > 11.0) {
+        maxRegularHours = 4.0;
+      }
+    }
+  }
+
+  let regularHours = Math.min(maxRegularHours, totalHours);
+  let overtimeHours = 0;
+
+  if (checkOut) {
+    const [outH, outM] = checkOut.split(':').map(Number);
+    if (!isNaN(outH) && !isNaN(outM)) {
+      const outDecimal = outH + (outM / 60);
+      // Overtime counts from 17:15 (17.25)
+      // If clock out is >= 17:16 (approx 17.26), then they get overtime.
+      if (outDecimal >= 17.26) {
+        overtimeHours = outDecimal - 17.25;
+      }
+    }
+  } else {
+    // Fallback if checkOut is not provided (shouldn't happen with new logic, but just in case)
+    overtimeHours = Math.max(0, totalHours - 8.0);
+  }
+
+  // Ensure precision
+  regularHours = Math.round(regularHours * 100) / 100;
+  overtimeHours = Math.round(overtimeHours * 100) / 100;
+
   return {
     regularHours,
     overtimeHours,
